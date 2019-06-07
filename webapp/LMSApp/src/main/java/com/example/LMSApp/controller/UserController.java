@@ -59,7 +59,7 @@ public class UserController {
 	}
 	
 	public Boolean validatePassword(String password) {
-		if (password != null || (!password.equalsIgnoreCase(""))) {
+		if (password != null && (!password.equalsIgnoreCase(""))) {
 			String pattern = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}";
 			return (password.matches(pattern));
 		} else {
@@ -69,7 +69,7 @@ public class UserController {
 	}
 
 	public Boolean validateEmail(String email) {
-		if (email != null || (!email.equalsIgnoreCase(""))) {
+		if (email != null && (!email.equalsIgnoreCase(""))) {
 			String emailvalidator = "^[a-zA-Z0-9_+&*-]+(?:\\." + "[a-zA-Z0-9_+&*-]+)*@" + "(?:[a-zA-Z0-9-]+\\.)+[a-z"
 					+ "A-Z]{2,7}$";
 

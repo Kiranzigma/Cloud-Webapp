@@ -64,17 +64,45 @@ public class BookController {
 		} else { 
 			entities.put("book", bookDaoServiceImpl.getBookById(bookId));
 			return new ResponseEntity<>(entities.get("book"),HttpStatus.OK);
-		} /*
-			 * else { entities.put("message", "Not authorized to read this book"); return
-			 * new ResponseEntity<>(entities, HttpStatus.UNAUTHORIZED); }
-			 */
+		} 	
 	}
 	
 	
-	
-	
-	
-	
+	@PutMapping("/book")
+	public ResponseEntity<Object> updateBook(@Valid @RequestBody Book bookDetails) {
+		// Check if user authenticated and authorized
+		Book book = bookDaoServiceImpl.getBookById(bookDetails.getId());
+		HashMap<String, Object> entities = new HashMap<String, Object>();
+		if (null == book) {
+			entities.put("message", "Book does not exists");
+			return new ResponseEntity<>(entities, HttpStatus.BAD_REQUEST);
+		}
+		else{
+		
+			book.setTitle(bookDetails.getTitle());
+			book.setIsbn(bookDetails.getIsbn());
+			book.setAuthor(bookDetails.getAuthor());
+			book.setQuantity(bookDetails.getQuantity());
+			Book updatedBook = bookDaoServiceImpl.updateBook(book);
+			entities.put("book", updatedBook);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
-	
+		} 
+
+	}
+	@DeleteMapping("/book/{id}")
+	public ResponseEntity<?> deleteBook(@PathVariable(value = "id") String bookId) {
+		Book book = bookDaoServiceImpl.getBookById(bookId);
+		HashMap<String, Object> entities = new HashMap<String, Object>();
+		if (null == book) {
+			entities.put("message", "Book does not exists");
+			return new ResponseEntity<>(entities, HttpStatus.BAD_REQUEST);
+		} 
+		else{
+			bookDaoServiceImpl.deleteBook(book);
+			entities.put("Deleted", "Book was successfuly deleted");
+			return new ResponseEntity<>(entities, HttpStatus.NO_CONTENT);
+		}
+	}
+		
 }
