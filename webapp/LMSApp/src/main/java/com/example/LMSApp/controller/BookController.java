@@ -39,6 +39,36 @@ public class BookController {
 		return bookDaoServiceImpl.findAll();
 	}
 
+	@PostMapping("/book")
+	public ResponseEntity<Object> createNote(@Valid @RequestBody Book bookDetails) {
+		HashMap<String, Object> entities = new HashMap<String, Object>();
+		Book book  = bookDaoServiceImpl.createBook(bookDetails);
+		if(book!=null) {
+			entities.put("book", book);
+			return new ResponseEntity<>(entities.get("book"), HttpStatus.CREATED);
+		}else {
+			entities.put("message", "Book details are not entered correct");
+			return new ResponseEntity<>(entities, HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+
+
+	@GetMapping("/book/{id}")
+	public ResponseEntity<Object> getBookById(@PathVariable(value = "id") String bookId) {
+		HashMap<String, Object> entities = new HashMap<String, Object>();
+		Book book = bookDaoServiceImpl.getBookById(bookId);
+		if (null == book) {
+			entities.put("message", "Book does not exists");
+			return new ResponseEntity<>(entities, HttpStatus.NOT_FOUND);
+		} else { 
+			entities.put("book", bookDaoServiceImpl.getBookById(bookId));
+			return new ResponseEntity<>(entities.get("book"),HttpStatus.OK);
+		} /*
+			 * else { entities.put("message", "Not authorized to read this book"); return
+			 * new ResponseEntity<>(entities, HttpStatus.UNAUTHORIZED); }
+			 */
+	}
 	
 	
 	
