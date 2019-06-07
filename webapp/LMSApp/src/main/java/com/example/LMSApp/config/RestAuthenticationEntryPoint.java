@@ -22,7 +22,19 @@ public class RestAuthenticationEntryPoint extends BasicAuthenticationEntryPoint 
 	response.setCharacterEncoding("UTF-8");
     PrintWriter writer = response.getWriter();
     JSONObject jsonObject = new JSONObject();
-    jsonObject.put("message","you are not logged in");
+    if(path.contains("/book")) {
+    	if(request.getMethod().equals("GET")) {
+    		jsonObject.put("message", "Not authorized to read books");
+    	}else if(request.getMethod().equals("POST")) {
+    		jsonObject.put("message", "Not authorised to create this book");
+    	}else if(request.getMethod().equals("PUT")) {
+    		jsonObject.put("message", "Not authorised to update this book");
+    	}else {
+    		jsonObject.put("message", "Not authorized to Delete this book");
+		}
+	}else {
+		jsonObject.put("message", "you are not logged in");
+	}
     writer.println(jsonObject.toString());
 }
 
