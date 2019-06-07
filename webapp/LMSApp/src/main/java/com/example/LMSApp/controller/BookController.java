@@ -40,7 +40,7 @@ public class BookController {
 	}
 
 	@PostMapping("/book")
-	public ResponseEntity<Object> createNote(@Valid @RequestBody Book bookDetails) {
+	public ResponseEntity<Object> createBook(@Valid @RequestBody Book bookDetails) {
 		HashMap<String, Object> entities = new HashMap<String, Object>();
 		Book book  = bookDaoServiceImpl.createBook(bookDetails);
 		if(book!=null) {
