@@ -1,8 +1,13 @@
 package com.example.LMSApp.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -17,6 +22,7 @@ public class Book {
 	@Id
 	@GeneratedValue(generator = "UUID")
 	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+	
 	private String id;
 	
 	@NotBlank
@@ -31,7 +37,12 @@ public class Book {
 	@NotNull
 	@Range(min=1)
 	private int quantity;
-
+	
+	@OneToOne(targetEntity = ImageBook.class, cascade=CascadeType.ALL, orphanRemoval=true)
+	@PrimaryKeyJoinColumn
+	private ImageBook image;
+	
+	
 	
 
 	public String getId() {
@@ -73,6 +84,15 @@ public class Book {
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
+
+	public ImageBook getImage() {
+		return image;
+	}
+
+	public void setImage(ImageBook image) {
+        this.image = image;
+    }
+	
 	
 	
 	

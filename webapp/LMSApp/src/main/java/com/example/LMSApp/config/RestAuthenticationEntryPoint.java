@@ -23,14 +23,23 @@ public class RestAuthenticationEntryPoint extends BasicAuthenticationEntryPoint 
     PrintWriter writer = response.getWriter();
     JSONObject jsonObject = new JSONObject();
     if(path.contains("/book")) {
-    	if(request.getMethod().equals("GET")) {
-    		jsonObject.put("message", "Not authorized to read books");
+    	if(request.getMethod().equals("GET")&&path.contains("/image")) {
+    		jsonObject.put("message", "Not authorized to read image");
+    	}else if(request.getMethod().equals("POST")&&path.contains("/image")) {
+    		jsonObject.put("message", "Not authorised to create this image for book");
+    	}else if(request.getMethod().equals("PUT")&&path.contains("/image")) {
+    		jsonObject.put("message", "Not authorised to update this image for book");
+    	}else if(request.getMethod().equals("DELETE")&&path.contains("/image")){
+    		jsonObject.put("message", "Not authorized to delete image for  book");
+		}
+    	else if(request.getMethod().equals("GET")) {
+    		jsonObject.put("message", "Not authorized to read images for the book");
     	}else if(request.getMethod().equals("POST")) {
     		jsonObject.put("message", "Not authorised to create this book");
     	}else if(request.getMethod().equals("PUT")) {
     		jsonObject.put("message", "Not authorised to update this book");
     	}else {
-    		jsonObject.put("message", "Not authorized to Delete this book");
+    		jsonObject.put("message", "Not authorized to delete this book");
 		}
 	}else {
 		jsonObject.put("message", "you are not logged in");
