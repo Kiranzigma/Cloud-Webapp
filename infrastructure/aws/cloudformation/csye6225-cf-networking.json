@@ -1,0 +1,190 @@
+{
+    
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "AWS CloudFormation Template ",
+    "Parameters":{
+        "VPCName":{
+           "Type":"String"
+        },
+        "RouteTable":{
+           "Type":"String"
+        },
+        "PublicSubnet1":{
+           "Type":"String"
+        },
+        "PublicSubnet2":{
+           "Type":"String"
+        },
+        "PublicSubnet3":{
+           "Type":"String"
+        },
+        "InternetGateway":{
+           "Type":"String"
+        },
+     },
+    "Resources": {
+        "CCVPCName": {
+            "Type": "AWS::EC2::VPC",
+            "Properties": {
+               "CidrBlock":"10.0.0.0/16",
+               "EnableDnsSupport":"true",
+               "EnableDnsHostnames":"true",
+               "InstanceTenancy":"default",
+               "Tags":[
+                  {
+                     "Key":"Name",
+                     "Value":{
+                        "Ref":"VPCName"
+                     }
+                  }
+               ]
+            }
+
+        },
+        "CCPublicSubnet1": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "CCVPCName"
+                },
+                "CidrBlock":"10.0.1.0/24",
+                "AvailabilityZone":"us-east-1a",
+                "MapPublicIpOnLaunch":true,
+                "Tags":[
+                  {
+                     "Key":"Name",
+                     "Value":{
+                        "Ref":"PublicSubnet1"
+                     }
+                  }
+                ]
+            }
+        },
+        "CCPublicSubnet2": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "CCVPCName"
+                },
+                "CidrBlock":"10.0.2.0/24",
+                "AvailabilityZone":"us-east-1b",
+                "MapPublicIpOnLaunch":true,
+                "Tags":[
+                  {
+                     "Key":"Name",
+                     "Value":{
+                        "Ref":"PublicSubnet2"
+                     }
+                  }
+                ]
+            }
+        },
+        "CCPublicSubnet3": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "CCVPCName"
+                },
+                "CidrBlock":"10.0.3.0/24",
+                "AvailabilityZone":"us-east-1c",
+                "MapPublicIpOnLaunch":true,
+                "Tags":[
+                  {
+                     "Key":"Name",
+                     "Value":{
+                        "Ref":"PublicSubnet3"
+                     }
+                  }
+                ]
+            }
+        },
+        "CCInternetGateway": {
+            "Type": "AWS::EC2::InternetGateway",
+            "Properties": {
+                "Tags":[
+                    {
+                       "Key":"Name",
+                       "Value":{
+                          "Ref":"InternetGateway"
+                       }
+                    }
+                 ]
+            }
+        },
+        "CCGateWayAttachment": {
+            "Type": "AWS::EC2::VPCGatewayAttachment",
+            "Properties": {
+                "InternetGatewayId": {
+                    "Ref": "CCInternetGateway"
+                },
+                "VpcId": {
+                    "Ref": "CCVPCName"
+                }
+            }
+        },
+        "CCRouteTable": {
+            "Type": "AWS::EC2::RouteTable",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "CCVPCName"
+                },
+                "Tags":[
+                    {
+                       "Key":"Name",
+                       "Value":{
+                          "Ref":"RouteTable"
+                       }
+                    }
+                 ]
+            }
+        },
+        "CCPublicRoute": {
+            "Type": "AWS::EC2::Route",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "CCRouteTable"
+                },
+                "GatewayId": {
+                    "Ref": "CCInternetGateway"
+                },
+                "DestinationCidrBlock":"0.0.0.0/0"
+            },
+            "DependsOn": [
+                "CCGateWayAttachment"
+            ]
+        },
+        "CCSubnet3RTAssociation": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "CCRouteTable"
+                },
+                "SubnetId": {
+                    "Ref": "CCPublicSubnet3"
+                }
+            }
+        },
+        "CCSubnet1RTAssociation": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "CCRouteTable"
+                },
+                "SubnetId": {
+                    "Ref": "CCPublicSubnet1"
+                }
+            }
+        },
+        "CCSubnet2RTAssociation": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "CCRouteTable"
+                },
+                "SubnetId": {
+                    "Ref": "CCPublicSubnet2"
+                }
+            }
+        }
+    }
+}
