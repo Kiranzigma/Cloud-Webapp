@@ -20,7 +20,7 @@
         },
         "InternetGateway":{
            "Type":"String"
-        },
+        }
      },
     "Resources": {
         "CCVPCName": {
@@ -186,5 +186,45 @@
                 }
             }
         }
-    }
+    },
+    "Outputs": {
+	    "VPCId": {
+	      "Description": "VPC ID",
+	      "Value": {
+		"Ref": "CCVPCName"
+	      },
+	      "Export": {
+		"Name": {"Fn::Sub": "${AWS::StackName}-VPCID"}
+	      }
+	    },
+	    "PublicSubnet1": {
+	      "Description": "The subnet ID to use for WEB APP security group",
+	      "Value": {
+		"Ref": "CCPublicSubnet1"
+	      },
+	      "Export": {
+		"Name": {"Fn::Sub": "${AWS::StackName}-PublicSubnet1"}
+	      }
+	    },
+	    "PublicSubnet2": {
+	      "Description": "The subnet ID to use for RDS security group",
+	      "Value": {
+		"Ref": "CCPublicSubnet2"
+	      },
+	      "Export": {
+		"Name": {"Fn::Sub": "${AWS::StackName}-PublicSubnet2"}
+		
+	      }
+	    },
+	    "PublicSubnet3": {
+	      "Description": "The subnet ID to use for RDS security group",
+	      "Value": {
+		"Ref": "CCPublicSubnet3"
+	      },
+	      "Export": {
+		"Name": {"Fn::Sub": "${AWS::StackName}-PublicSubnet3"}
+		
+	      }
+	    }
+  }
 }
