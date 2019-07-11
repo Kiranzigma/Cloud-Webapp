@@ -28,7 +28,7 @@ jobs:
             mv webapp/LMSApp/target/LMSApp-0.0.1-SNAPSHOT.war package/
             mv appspec.yml package/
             cd package
-            zip application.zip LMSApp-0.0.1-SNAPSHOT.war applicationstart.sh afterinstall.sh appspec.yml 
+            zip application.zip LMSApp-0.0.1-SNAPSHOT.war applicationstart.sh afterInstall.sh appspec.yml 
             chmod 777 application.zip 
       - run:
           name: Upload ZIP to S3 bucket
