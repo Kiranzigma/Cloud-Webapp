@@ -210,7 +210,6 @@ public class BookController {
 
 			String path = System.getProperty("user.dir");
 			System.out.println("Path---"+path);
-			
 			String name;
 			String fileName = null;
 
@@ -229,6 +228,7 @@ public class BookController {
 					imageDetails.setPath(fileName);
 					imageDetails.setId(book.getId());
 					book.setImage(imageDetails);        
+					
 
 					bookDaoServiceImpl.updateBook(book);
 

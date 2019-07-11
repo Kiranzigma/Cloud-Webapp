@@ -2,41 +2,39 @@ version: 2
 jobs:
   build:
     docker:
+      # specify the version you desire here
       - image: circleci/openjdk:8-jdk
+    # environment:
+    #   # Customize the JVM maximum heap limit
+    #   MAVEN_OPTS: -Xmx3200m
     steps:
       - checkout
       - run:
-          name: Build Artifact
+          name: Install AWS CLI
           command: |
-            cd webapp
-            ./gradlew war
-            cd build/libs
-            ls -al
-            cd ../../..
+            sudo apt-get -y -qq install awscli
+            aws --version
       - run:
-          name: Zip Artifact
+          name: Build JAR and Run Unit Tests
           command: |
-            echo "Hello the current build number is ${CIRCLE_BUILD_NUM}"
-            pwd
-            ls -al
-            mkdir -p codedeploy_artifact
-            cp infrastructure/aws/codedeploy/*.sh .
-            zip -r csye6225-web-app-${CIRCLE_BUILD_NUM}.zip webapp/build/libs/ROOT.war *.sh *.yml
-            ls -al
-            mv csye6225-web-app-${CIRCLE_BUILD_NUM}.zip codedeploy_artifact/
-            ls -al
-            pwd
-            cd codedeploy_artifact
-            ls -al
-            pwd
-            cd ..
-            pwd
-            ls -al
+            cd webapp/LMSApp
+            mvn clean package
       - run:
-          name: Upload Artifact to S3
+          name: Zip JAR File
           command: |
-            echo "Hello"
+            mkdir package
+            mv infrastructure/aws/codedeploy/applicationstart.sh package/
+            mv infrastructure/aws/codedeploy/afterinstall.sh package/
+            mv webapp/LMSApp/target/LMSApp-0.0.1-SNAPSHOT.war package/
+            mv appspec.yml package/
+            cd package
+            zip application.zip LMSApp-0.0.1-SNAPSHOT.war applicationstart.sh afterinstall.sh appspec.yml 
+            chmod 777 application.zip 
       - run:
-          name: Make CodeDeploy API call
-          command: |
-            echo "Hello CodeDeploy" 
+          name: Upload ZIP to S3 bucket
+          command: aws s3 cp package/application.zip s3://code-deploy.csye6225-su19-$AWS_BUCKET_NAME.me
+      - run:
+          name: Create Deployment
+          command: aws deploy create-deployment --application-name csye6225-webapp --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name csye6225-webapp-deployment --s3-location bucket=code-deploy.csye6225-su19-$AWS_BUCKET_NAME.me,bundleType=zip,key=application.zip
+
+

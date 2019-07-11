@@ -13,6 +13,9 @@
       },
       "AMI":{
          "Type":"String"
+      },
+      "BucketName":{
+         "Type":"String"
       }
    },
    "Resources":{
@@ -49,6 +52,12 @@
                   "CidrIp":"0.0.0.0/0",
                   "FromPort":443,
                   "ToPort":443
+               },
+               {
+                  "IpProtocol":"tcp",
+                  "CidrIp":"0.0.0.0/0",
+                  "FromPort":8080,
+                  "ToPort":8080
                }
             ],
             "VpcId":{
@@ -127,7 +136,48 @@
                {
                   "Ref":"WebAppSecurityGroup"
                }
-            ]
+            ],
+            "IamInstanceProfile":{
+               "Fn::ImportValue":"EC2InstanceProfile"
+            },
+            "UserData":{
+               "Fn::Base64":{
+                  "Fn::Join":[
+                     "",
+                     [
+                        "#!/bin/bash -xe \n",
+                        "sudo yum update \n",
+                        "echo export DB_USERNAME='csye6225master' >> /etc/profile \n",
+                        "echo export DB_PASSWORD='csye6225password' >> /etc/profile \n",
+                        "echo export DB_HOST=",
+                        {
+                           "Fn::GetAtt":[
+                              "DBServer",
+                              "Endpoint.Address"
+                           ]
+                        },
+                        " >> /etc/profile \n",
+                        "echo export DB_PORT=",
+                        {
+                           "Fn::GetAtt":[
+                              "DBServer",
+                              "Endpoint.Port"
+                           ]
+                        },
+                        " >> /etc/profile \n",
+                        "echo export S3_BUCKET=",
+                        {
+                           "Fn::Sub":"csye6225-su19-${BucketName}.me.csye6225.com"
+                        },
+                        " >> /etc/profile \n",
+                        "sudo service codedeploy-agent start \n",
+                        "sudo service codedeploy-agent status \n",
+                        "systemctl start ntpd \n",
+                        "systemctl enable ntpd"
+                     ]
+                  ]
+               }
+            }
          }
       },
       "DBServer":{
@@ -206,6 +256,43 @@
                   }
                }
             ]
+         }
+      },
+      "CodeDeployApplication":{
+         "Type":"AWS::CodeDeploy::Application",
+         "Properties":{
+            "ApplicationName":"csye6225-webapp",
+            "ComputePlatform":"Server"
+         }
+      },
+      "DeploymentGroup":{
+         "Type":"AWS::CodeDeploy::DeploymentGroup",
+         "Properties":{
+            "ApplicationName":{
+               "Ref":"CodeDeployApplication"
+            },
+            "DeploymentGroupName":"csye6225-webapp-deployment",
+            "DeploymentStyle":{
+               "DeploymentType":"IN_PLACE",
+               "DeploymentOption":"WITHOUT_TRAFFIC_CONTROL"
+            },
+            "DeploymentConfigName":"CodeDeployDefault.AllAtOnce",
+            "Ec2TagFilters":[
+               {
+                  "Key":"Name",
+                  "Value":{"Fn::Sub":"${AppName}-EC2Instance"},
+                  "Type":"KEY_AND_VALUE"
+               }
+            ],
+            "AutoRollbackConfiguration":{
+               "Enabled":"true",
+               "Events":[
+                  "DEPLOYMENT_FAILURE"
+               ]
+            },
+            "ServiceRoleArn":{
+               "Fn::ImportValue":"CodeDeployServiceRole"
+            }
          }
       }
    }
