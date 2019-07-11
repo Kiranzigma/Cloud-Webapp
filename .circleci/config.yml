@@ -24,7 +24,7 @@ jobs:
           command: |
             mkdir package
             mv infrastructure/aws/codedeploy/applicationstart.sh package/
-            mv infrastructure/aws/codedeploy/afterinstall.sh package/
+            mv infrastructure/aws/codedeploy/afterInstall.sh package/
             mv webapp/LMSApp/target/LMSApp-0.0.1-SNAPSHOT.war package/
             mv appspec.yml package/
             cd package
