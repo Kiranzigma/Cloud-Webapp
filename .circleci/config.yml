@@ -35,6 +35,6 @@ jobs:
           command: aws s3 cp package/application.zip s3://code-deploy.csye6225-su19-$AWS_BUCKET_NAME.me
       - run:
           name: Create Deployment
-          command: aws deploy create-deployment --application-name csye6225-webapp --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name csye6225-webapp-deployment --s3-location bucket=code-deploy.csye6225-su19-$AWS_BUCKET_NAME.me,bundleType=zip,key=application.zip
+          command: aws deploy create-deployment --application-name csye6225-webapp --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name csye6225-webapp-deployment --region=$AWS_REGION --s3-location bucket=code-deploy.csye6225-su19-$AWS_BUCKET_NAME.me,bundleType=zip,key=application.zip
 
 
