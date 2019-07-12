@@ -2,8 +2,8 @@ version: 0.0
 os: linux
 
 files:             
-  - source: ./webapp/build/libs/ROOT.war
-    destination: /opt/tomcat/webapps
+  - source: LMSApp-0.0.1-SNAPSHOT.war
+    destination: /var
 
 hooks:
   AfterInstall:
