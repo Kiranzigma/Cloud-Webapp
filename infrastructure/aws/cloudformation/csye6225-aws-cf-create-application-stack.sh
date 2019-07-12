@@ -23,9 +23,11 @@ do
 
         read -p "Enter Your AMI ID: " AMI
 
+        read -p "Enter Your BucketName: " BucketName    
+
         echo "...................... Creating $appStackName ......................"
         printf "......................  Please wait  ...................... \n"
-        aws cloudformation create-stack --stack-name $appStackName --template-body file://csye6225-cf-application.json --capabilities CAPABILITY_NAMED_IAM --parameters ParameterKey=AppName,ParameterValue=$appStackName ParameterKey=NetworkName,ParameterValue=$netStackName ParameterKey=SSHKeyName,ParameterValue=$SSHKeyName  ParameterKey=AMI,ParameterValue=$AMI
+        aws cloudformation create-stack --stack-name $appStackName --template-body file://csye6225-cf-application.json --capabilities CAPABILITY_NAMED_IAM --parameters ParameterKey=AppName,ParameterValue=$appStackName ParameterKey=NetworkName,ParameterValue=$netStackName ParameterKey=SSHKeyName,ParameterValue=$SSHKeyName  ParameterKey=AMI,ParameterValue=$AMI ParameterKey=BucketName,ParameterValue=$BucketName
         aws cloudformation wait stack-create-complete --stack-name $appStackName
             if [ $? -eq 0 ]; then
                 printf "\n\n"

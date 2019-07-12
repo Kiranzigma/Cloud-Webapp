@@ -20,10 +20,15 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.example.LMSApp.Dao.BookDaoService;
+import com.example.LMSApp.Dao.ImageDaoService;
 import com.example.LMSApp.Dao.UserDaoService;
 import com.example.LMSApp.controller.BookController;
+import com.example.LMSApp.controller.UserController;
 import com.example.LMSApp.model.Book;
 import com.example.LMSApp.model.User;
+import com.example.LMSApp.storage.StorageService;
+import com.example.LMSApp.util.AmazonS3Example;
+import com.example.LMSApp.util.GeneratePresignedURL;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebMvcTest(value = BookController.class, secure = false)
@@ -37,6 +42,19 @@ public class LMSAppApplicationTests {
    
    @MockBean
    private BookDaoService bookService;
+   
+   @MockBean
+   private StorageService storeService;
+   
+   @MockBean
+   private ImageDaoService imageService;
+   
+   @MockBean
+   private AmazonS3Example cloudStorage;
+
+   @MockBean
+   private GeneratePresignedURL genPreUrl;
+   
 
 	  @Test 
 	  public void emailChecker(){

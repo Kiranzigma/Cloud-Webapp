@@ -142,7 +142,8 @@ public class BookController {
 				neededBook.setIsbn(book.getIsbn());
 				neededBook.setQuantity(book.getQuantity());
 				neededBook.setTitle(book.getTitle());
-
+				
+				if(book.getImage()!=null) {
 				URL url = new URL(book.getImage().getPath());	 
 				String preUrl = genPreUrl.generatePreSignedUrl(FilenameUtils.getName(url.getPath()));
 
@@ -150,6 +151,7 @@ public class BookController {
 				neededImage.setPath(preUrl);
 
 				neededBook.setImage(neededImage);
+				}
 				entities.put("book", neededBook);
 				return new ResponseEntity<>(entities.get("book"),HttpStatus.OK);
 			}
@@ -182,7 +184,7 @@ public class BookController {
 	}
 
 	@DeleteMapping("/book/{id}")
-	public ResponseEntity<?> deleteBook(@PathVariable(value = "id") String bookId) {
+	public ResponseEntity<?> deleteBook(@PathVariable(value = "id") String bookId) throws MalformedURLException {
 		Book book = bookDaoServiceImpl.getBookById(bookId);
 		HashMap<String, Object> entities = new HashMap<String, Object>();
 		if (null == book) {
@@ -191,6 +193,7 @@ public class BookController {
 		} 
 		else{
 			bookDaoServiceImpl.deleteBook(book);
+			cloudStorage.delete(book.getImage().getPath());
 			entities.put("Deleted", "Book was successfuly deleted");
 			return new ResponseEntity<>(entities, HttpStatus.NO_CONTENT);
 		}
@@ -211,8 +214,7 @@ public class BookController {
 			String fileName = null;
 
 			System.out.println("Here----");
-			//System.out.println("Here----"+book.getImage());
-			//System.out.println(book.getImageBook().getImage_id());
+			
 			if(book!=null) {
 				if(book.getImage()==null) {
 					if(environment.equals("local")) {
@@ -226,13 +228,10 @@ public class BookController {
 					imageDetails.setPath(fileName);
 					imageDetails.setId(book.getId());
 					book.setImage(imageDetails);        
-					//imageDetails.setBook(book);
-					//imageDetails.setId("1");
-					//imageDaoServiceImpl.createImageBook(imageDetails);
+					
 
 					bookDaoServiceImpl.updateBook(book);
 
-					//imageDetails = imageDaoServiceImpl.createImageBook(imageDetails);
 
 					entities.put("image", imageDaoServiceImpl.getImageBookById(book.getImage().getId()));
 					return new ResponseEntity<>(entities.get("image"), HttpStatus.OK);																																														
@@ -338,15 +337,6 @@ public class BookController {
 		} 
 		else{
 			if(book.getImage()!=null) {	
-				//System.out.println("1--"+imageDaoServiceImpl.getImageBookById(book.getId()));
-				//System.out.println("2--"+ book.getImage());
-				//bookDaoServiceImpl.deleteBook(book);				
-				//imageDaoServiceImpl.deleteImageBook(imageDaoServiceImpl.getImageBookById(book.getId()));
-				//imageDaoServiceImpl.deleteImageBook(imageId);
-				//ImageBook imageDetails = new ImageBook();
-				//imageDetails = null;
-				//imageDetails.setPath(null);
-				//imageDetails.setId(null);
 				if(environment.equals("local")) {
 					book.setImage(null);
 					bookDaoServiceImpl.updateBook(book);
@@ -355,6 +345,9 @@ public class BookController {
 				else {
 					try {
 						cloudStorage.delete(book.getImage().getPath());
+						book.setImage(null);
+						bookDaoServiceImpl.updateBook(book);
+						entities.put("Deleted", "Image was successfuly deleted");
 					} catch (MalformedURLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
