@@ -79,7 +79,7 @@ public class LMSAppApplicationTests {
 				bookService.getBookById(Mockito.anyString())).thenReturn(mockBook);
 
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(
-				"/book/159b43eb-d8d0-49e0-a614-0b0ca10657bf").accept(
+				"/book-nithin/159b43eb-d8d0-49e0-a614-0b0ca10657bf").accept(
 				MediaType.APPLICATION_JSON);
 
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
@@ -106,7 +106,7 @@ public class LMSAppApplicationTests {
 
 		// Send bookDetails as body to /book
 		RequestBuilder requestBuilder = MockMvcRequestBuilders
-				.post("/book/")
+				.post("/book-nithin/")
 				.accept(MediaType.APPLICATION_JSON).content(exampleCourseJson)
 				.contentType(MediaType.APPLICATION_JSON);
 

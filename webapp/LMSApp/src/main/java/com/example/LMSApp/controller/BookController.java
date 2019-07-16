@@ -68,7 +68,7 @@ public class BookController {
 
 
 
-	@GetMapping("/book")
+	@GetMapping("/book-nithin")
 	public List<Book> getAllBook() throws MalformedURLException {
 
 		if(environment.equals("local")) {
@@ -106,7 +106,7 @@ public class BookController {
 		}
 	}
 
-	@PostMapping("/book")
+	@PostMapping("/book-nithin")
 	public ResponseEntity<Object> createBook(@Valid @RequestBody Book bookDetails ) {
 		HashMap<String, Object> entities = new HashMap<String, Object>();
 		Book book  = bookDaoServiceImpl.createBook(bookDetails);
@@ -121,7 +121,7 @@ public class BookController {
 
 
 
-	@GetMapping("/book/{id}")
+	@GetMapping("/book-nithin/{id}")
 	public ResponseEntity<Object> getBookById(@PathVariable(value = "id") String bookId) throws MalformedURLException {
 		HashMap<String, Object> entities = new HashMap<String, Object>();
 		Book book = bookDaoServiceImpl.getBookById(bookId);
@@ -183,7 +183,7 @@ public class BookController {
 
 	}
 
-	@DeleteMapping("/book/{id}")
+	@DeleteMapping("/book-nithin/{id}")
 	public ResponseEntity<?> deleteBook(@PathVariable(value = "id") String bookId) throws MalformedURLException {
 		Book book = bookDaoServiceImpl.getBookById(bookId);
 		HashMap<String, Object> entities = new HashMap<String, Object>();
@@ -199,7 +199,7 @@ public class BookController {
 		}
 	}
 
-	@PostMapping("/book/{id}/image")
+	@PostMapping("/book-nithin/{id}/image")
 	@ResponseBody
 	public ResponseEntity<Object> uploadFile(@PathVariable(value = "id") String bookId,@RequestParam("file") MultipartFile file) {
 		//System.out.println("Content  Type---"+file.getContentType());
