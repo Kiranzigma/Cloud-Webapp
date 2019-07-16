@@ -68,7 +68,7 @@ public class BookController {
 
 
 
-	@GetMapping("/book")
+	@GetMapping("/bookkiran")
 	public List<Book> getAllBook() throws MalformedURLException {
 
 		if(environment.equals("local")) {
@@ -106,7 +106,7 @@ public class BookController {
 		}
 	}
 
-	@PostMapping("/book")
+	@PostMapping("/bookkiran")
 	public ResponseEntity<Object> createBook(@Valid @RequestBody Book bookDetails ) {
 		HashMap<String, Object> entities = new HashMap<String, Object>();
 		Book book  = bookDaoServiceImpl.createBook(bookDetails);
@@ -121,7 +121,7 @@ public class BookController {
 
 
 
-	@GetMapping("/book/{id}")
+	@GetMapping("/bookkiran/{id}")
 	public ResponseEntity<Object> getBookById(@PathVariable(value = "id") String bookId) throws MalformedURLException {
 		HashMap<String, Object> entities = new HashMap<String, Object>();
 		Book book = bookDaoServiceImpl.getBookById(bookId);
@@ -160,7 +160,7 @@ public class BookController {
 	}
 
 
-	@PutMapping("/book")
+	@PutMapping("/bookkiran")
 	public ResponseEntity<Object> updateBook(@Valid @RequestBody Book bookDetails) {
 		// Check if user authenticated and authorized
 		Book book = bookDaoServiceImpl.getBookById(bookDetails.getId());
@@ -183,7 +183,7 @@ public class BookController {
 
 	}
 
-	@DeleteMapping("/book/{id}")
+	@DeleteMapping("/bookkiran/{id}")
 	public ResponseEntity<?> deleteBook(@PathVariable(value = "id") String bookId) throws MalformedURLException {
 		Book book = bookDaoServiceImpl.getBookById(bookId);
 		HashMap<String, Object> entities = new HashMap<String, Object>();
@@ -199,7 +199,7 @@ public class BookController {
 		}
 	}
 
-	@PostMapping("/book/{id}/image")
+	@PostMapping("/bookkiran/{id}/image")
 	@ResponseBody
 	public ResponseEntity<Object> uploadFile(@PathVariable(value = "id") String bookId,@RequestParam("file") MultipartFile file) {
 		//System.out.println("Content  Type---"+file.getContentType());
@@ -249,7 +249,7 @@ public class BookController {
 		return new ResponseEntity<>(entities, HttpStatus.BAD_REQUEST); 
 	}
 
-	@GetMapping("/book/{idBook}/image/{idImage}")
+	@GetMapping("/bookkiran/{idBook}/image/{idImage}")
 	@ResponseBody
 	public ResponseEntity<Object> getImageById(@PathVariable(value = "idBook") String bookId,@PathVariable(value = "idImage") String imageId) throws MalformedURLException {
 		HashMap<String, Object> entities = new HashMap<String, Object>();
@@ -281,7 +281,7 @@ public class BookController {
 		return new ResponseEntity<>(entities, HttpStatus.BAD_REQUEST); 
 	}
 
-	@PutMapping("/book/{idBook}/image/{idImage}")
+	@PutMapping("/bookkiran/{idBook}/image/{idImage}")
 	public ResponseEntity<Object> updateImage(@PathVariable(value = "idBook") String bookId,@PathVariable(value = "idImage") String imageId,@RequestParam("file") MultipartFile file) {
 		// Check if user authenticated and authorized
 		HashMap<String, Object> entities = new HashMap<String, Object>();
@@ -327,7 +327,7 @@ public class BookController {
 		return new ResponseEntity<>(entities, HttpStatus.BAD_REQUEST); 
 	}
 
-	@DeleteMapping("/book/{idBook}/image/{idImage}")
+	@DeleteMapping("/bookkiran/{idBook}/image/{idImage}")
 	public ResponseEntity<?> deleteImage(@PathVariable(value = "idBook") String bookId,@PathVariable(value = "idImage") String imageId) {
 		Book book = bookDaoServiceImpl.getBookById(bookId);
 		HashMap<String, Object> entities = new HashMap<String, Object>();
