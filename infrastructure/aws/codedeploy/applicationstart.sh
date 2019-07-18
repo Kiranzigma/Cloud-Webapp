@@ -2,6 +2,7 @@
 tail /etc/profile -n 5 > /tmp/tempFile.sh
 sudo chmod 777 /tmp/tempFile.sh
 echo "sudo yum install lsof -y" >> /tmp/tempFile.sh
+echo "sudo yum install psmisc -y" >> /tmp/tempFile.sh
 echo "APP_PORT=sudo lsof -t -i:8080" >> /tmp/tempFile.sh
 echo "fuser -k 8080/tcp" >> /tmp/tempFile.sh
 echo "sudo kill -9 \$APP_PORT" >> /tmp/tempFile.sh
