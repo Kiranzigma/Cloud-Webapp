@@ -3,7 +3,7 @@ os: linux
 
 files:             
   - source: LMSApp-0.0.1-SNAPSHOT.war
-    destination: /var
+    destination: /opt/tomcat/webapps
 
 hooks:
   AfterInstall:
