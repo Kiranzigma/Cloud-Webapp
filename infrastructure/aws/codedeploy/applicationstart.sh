@@ -5,7 +5,7 @@ sudo chmod 777 /tmp/tempFile.sh
 #echo "APP_PORT=sudo lsof -t -i:8080" >> /tmp/tempFile.sh
 #echo "sudo kill -9 \$APP_PORT" >> /tmp/tempFile.sh
 #echo "cd /var" >> /tmp/tempFile.sh
-echo "sudo -s" >> /tmp/tempFile.sh
+echo "sudo su" >> /tmp/tempFile.sh
 echo "cd /opt/tomcat/bin" >> /tmp/tempFile.sh
 echo "./shutdown.sh" >> /tmp/tempFile.sh
 #echo "cd /opt/tomcat/webapps" >> /tmp/tempFile.sh
