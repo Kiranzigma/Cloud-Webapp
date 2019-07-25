@@ -7,6 +7,7 @@ sudo chmod 777 /tmp/tempFile.sh
 #echo "cd /var" >> /tmp/tempFile.sh
 #echo "sudo su" >> /tmp/tempFile.sh
 #echo "cd /opt/tomcat/bin" >> /tmp/tempFile.sh
+echo "sudo export PROFILE=cloud" >> /tmp/tempFile.sh
 echo "sudo rm /opt/tomcat/bin/setenv.sh" >> /tmp/tempFile.sh
 #echo "cd /opt/tomcat/webapps" >> /tmp/tempFile.sh
 echo "sudo bash /opt/tomcat/bin/shutdown.sh" >> /tmp/tempFile.sh
