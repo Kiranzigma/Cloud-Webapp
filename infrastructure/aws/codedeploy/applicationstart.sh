@@ -10,14 +10,14 @@ sudo chmod 777 /tmp/tempFile.sh
 echo "sudo rm /opt/tomcat/bin/setenv.sh" >> /tmp/tempFile.sh
 echo "bash opt/tomcat/bin/shutdown.sh" >> /tmp/tempFile.sh
 #echo "cd /opt/tomcat/webapps" >> /tmp/tempFile.sh
-echo "bash /opt/tomcat/bin/shutdown.sh" >> /tmp/tempFile.sh
-echo "touch /opt/tomcat/bin/setenv.sh" >> /tmp/tempFile.sh
+echo "sudo bash /opt/tomcat/bin/shutdown.sh" >> /tmp/tempFile.sh
+echo "sudo touch /opt/tomcat/bin/setenv.sh" >> /tmp/tempFile.sh
 echo "sudo chmod 777 /opt/tomcat/bin/setenv.sh" >> /tmp/tempFile.sh 
 echo "sudo echo 'export JAVA_OPTS=\"-Dspring.profiles.active=\$PROFILE -Ddatabase=\$DB_HOST -Dbucketname=\$S3_BUCKET \" >> setenv.sh" >> /tmp/tempFile.sh
 #echo "sudo echo 'export database=\$DB_HOST' >> setenv.sh" >> /tmp/tempFile.sh
 #echo "sudo echo 'export bucketname=\$S3_BUCKET >> setenv.sh" >> /tmp/tempFile.sh   
 #echo "Environment=\"JAVA_OPTS=-Djava.awt.headless=true -Dspring.profiles.active=cloud -Ddatabase=\$DB_HOST -Dbucketname=\$S3_BUCKET -Djava.security.egd=file:/dev/./urandom\"" >> /tmp/tempFile.sh
 #echo "sudo java -jar -Dspring.profiles.active=cloud -Ddatabase=\$DB_HOST -Dbucketname=\$S3_BUCKET LMSApp-0.0.1-SNAPSHOT.war" >> /tmp/tempFile.sh
-echo "bash opt/tomcat/bin/startup.sh" >> /tmp/tempFile.sh
+echo "sudo bash opt/tomcat/bin/startup.sh" >> /tmp/tempFile.sh
 cd /tmp/
 ./tempFile.sh > run.out 2> run.err &
