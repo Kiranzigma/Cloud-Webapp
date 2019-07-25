@@ -13,7 +13,7 @@ echo "sudo rm /opt/tomcat/bin/setenv.sh" >> /tmp/tempFile.sh
 echo "sudo bash /opt/tomcat/bin/shutdown.sh" >> /tmp/tempFile.sh
 echo "sudo touch /opt/tomcat/bin/setenv.sh" >> /tmp/tempFile.sh
 echo "sudo chmod 777 /opt/tomcat/bin/setenv.sh" >> /tmp/tempFile.sh 
-echo "sudo echo \"export JAVA_OPTS=\"-Dspring.profiles.active=\$PROFILE -Ddatabase=\$DB_HOST -Dbucketname=\$S3_BUCKET\"\" >> setenv.sh" >> /tmp/tempFile.sh
+echo "sudo echo \"export JAVA_OPTS=\"-Dspring.profiles.active=\$PROFILE -Ddatabase=\$DB_HOST -Dbucketname=\$S3_BUCKET\"\" >> /opt/tomcat/bin/setenv.sh" >> /tmp/tempFile.sh
 #echo "sudo echo 'export database=\$DB_HOST' >> setenv.sh" >> /tmp/tempFile.sh
 #echo "sudo echo 'export bucketname=\$S3_BUCKET >> setenv.sh" >> /tmp/tempFile.sh   
 #echo "Environment=\"JAVA_OPTS=-Djava.awt.headless=true -Dspring.profiles.active=cloud -Ddatabase=\$DB_HOST -Dbucketname=\$S3_BUCKET -Djava.security.egd=file:/dev/./urandom\"" >> /tmp/tempFile.sh
