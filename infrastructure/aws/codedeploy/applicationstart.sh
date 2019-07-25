@@ -19,4 +19,4 @@ echo "sudo echo \"export JAVA_OPTS=\\\"-Dspring.profiles.active=\$PROFILE -Ddata
 #echo "sudo java -jar -Dspring.profiles.active=cloud -Ddatabase=\$DB_HOST -Dbucketname=\$S3_BUCKET LMSApp-0.0.1-SNAPSHOT.war" >> /tmp/tempFile.sh
 echo "sudo bash /opt/tomcat/bin/startup.sh" >> /tmp/tempFile.sh
 cd /tmp/
-./tempFile.sh > run.out 2> run.err &
+./tempFile.sh > run.out 2 > run.err &
