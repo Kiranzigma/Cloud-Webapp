@@ -1,6 +1,7 @@
 #!/bin/bash
 tail /etc/profile -n 5 > /tmp/tempFile.sh
 sudo chmod 777 /tmp/tempFile.sh
+
 #echo "sudo yum install lsof -y" >> /tmp/tempFile.sh
 #echo "APP_PORT=sudo lsof -t -i:8080" >> /tmp/tempFile.sh
 #echo "sudo kill -9 \$APP_PORT" >> /tmp/tempFile.sh
@@ -20,3 +21,4 @@ echo "sudo echo \"export JAVA_OPTS=\\\"-Dspring.profiles.active=\$PROFILE -Ddata
 echo "sudo bash /opt/tomcat/bin/startup.sh" >> /tmp/tempFile.sh
 cd /tmp/
 ./tempFile.sh > run.out 2 > run.err &
+
