@@ -1,9 +1,15 @@
 package com.example.LMSApp.config;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
+
+import com.example.LMSApp.controller.UserController;
+import com.timgroup.statsd.StatsDClient;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +19,10 @@ import java.io.PrintWriter;
 
 @Component
 public class RestAuthenticationEntryPoint extends BasicAuthenticationEntryPoint {
+
+  private final static Logger logger = LoggerFactory.getLogger(UserController.class);	
+  @Autowired
+  private StatsDClient statsDClient;
 
   @Override
   public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authEx) throws IOException, ServletException {
@@ -42,6 +52,8 @@ public class RestAuthenticationEntryPoint extends BasicAuthenticationEntryPoint 
     		jsonObject.put("message", "Not authorized to delete this book");
 		}
 	}else {
+		logger.info("--Inside invalid logging--");
+		statsDClient.incrementCounter("endpoint.login.http.get /");
 		jsonObject.put("message", "you are not logged in");
 	}
     writer.println(jsonObject.toString());
