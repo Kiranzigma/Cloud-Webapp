@@ -6,6 +6,8 @@ import java.util.HashMap;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.LMSApp.Dao.UserDaoService;
 import com.example.LMSApp.model.User;
+import com.timgroup.statsd.NonBlockingStatsDClient;
+import com.timgroup.statsd.StatsDClient;
 
 
 @RestController
@@ -25,10 +29,21 @@ public class UserController {
 	@Autowired
 	UserDaoService userDaoService;
 	
+	private final static Logger logger = LoggerFactory.getLogger(UserController.class);
+	
+	@Autowired
+	private StatsDClient statsDClient;
+//	private static final StatsDClient statsDClient = new NonBlockingStatsDClient("csye6225.webapp", "localhost", 8125);
 	
 	@GetMapping(path = "/", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> listUser() {
-
+		
+		System.out.println("-----------statsDClient.toString()--------------");
+		
+		logger.info("--Inside root mapping--");
+		logger.warn("---This is a Warn Message");
+		logger.error("This is an error message");
+		statsDClient.incrementCounter("endpoint.login.http.get");
 		HashMap<String, Object> entities = new HashMap();
 		entities.put("Status", "Authenticated");
 		SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
@@ -39,7 +54,14 @@ public class UserController {
 	
 	@PostMapping("/user/register")
 	public ResponseEntity<Object> createUser(@Valid @RequestBody User user) {
-
+		
+		System.out.println("Inside post /user/register mapping");
+		
+		logger.info("Inside post /user/register mapping");
+		
+		statsDClient.incrementCounter("endpoint.login.http.post");
+		
+		
 		HashMap<String, Object> entities = new HashMap();
 		User ent = null;
 		if (validateEmail(user.getEmail()) && validatePassword(user.getPassword())) {

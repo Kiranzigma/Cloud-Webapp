@@ -1,10 +1,10 @@
 version: 0.0
 os: linux
-
 files:             
   - source: LMSApp-0.0.1-SNAPSHOT.war
     destination: /opt/tomcat/webapps
-
+  - source: amazon-cloudwatch-agent.json
+    destination: /opt/aws/amazon-cloudwatch-agent/etc
 hooks:
   AfterInstall:
    - location: ./afterInstall.sh
