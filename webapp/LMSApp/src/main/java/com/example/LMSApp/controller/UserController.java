@@ -59,7 +59,7 @@ public class UserController {
 		
 		logger.info("Inside post /user/register mapping");
 		
-		statsDClient.incrementCounter("post /user/register");
+		statsDClient.incrementCounter("endpoint.login.http.post");
 		
 		
 		HashMap<String, Object> entities = new HashMap();
