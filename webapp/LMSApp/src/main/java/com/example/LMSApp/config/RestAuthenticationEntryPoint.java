@@ -52,4 +52,4 @@ public class RestAuthenticationEntryPoint extends BasicAuthenticationEntryPoint 
     setRealmName("cc6225");
     super.afterPropertiesSet();
   }
- }
+}
