@@ -31,12 +31,14 @@ public class UserController {
 	
 	private final static Logger logger = LoggerFactory.getLogger(UserController.class);
 	
-//	@Autowired()
-//    private StatsDClient statsDClient;
-	private static final StatsDClient statsDClient = new NonBlockingStatsDClient("csye6225.webapp", "localhost", 8125);
+	@Autowired
+	private StatsDClient statsDClient;
+//	private static final StatsDClient statsDClient = new NonBlockingStatsDClient("csye6225.webapp", "localhost", 8125);
 	
 	@GetMapping(path = "/", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> listUser() {
+		
+		System.out.println(statsDClient.toString());
 		
 		logger.info("--Inside root mapping--");
 		statsDClient.incrementCounter("endpoint.login.http.get");
