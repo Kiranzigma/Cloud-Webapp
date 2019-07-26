@@ -80,7 +80,7 @@ public class BookController {
 	public List<Book> getAllBook() throws MalformedURLException {
 
 		statsDClient.incrementCounter("endpoint.book.http.get");
-		logger.info("--Inside /book GET mapping--");
+		logger.info("Inside /book GET mapping");
 		if(environment.equals("local")) {
 			return bookDaoServiceImpl.findAll();
 		}
@@ -119,7 +119,7 @@ public class BookController {
 	@PostMapping("/book")
 	public ResponseEntity<Object> createBook(@Valid @RequestBody Book bookDetails ) {
 		statsDClient.incrementCounter("endpoint.post.http.post");
-		logger.info("--Inside /book POST mapping--");
+		logger.info("Inside /book POST mapping");
 		HashMap<String, Object> entities = new HashMap<String, Object>();
 		Book book  = bookDaoServiceImpl.createBook(bookDetails);
 		if(book!=null) {
@@ -136,7 +136,7 @@ public class BookController {
 	@GetMapping("/book/{id}")
 	public ResponseEntity<Object> getBookById(@PathVariable(value = "id") String bookId) throws MalformedURLException {
 		statsDClient.incrementCounter("endpoint.book.id.http.get");
-		logger.info("--Inside /book/bookid GET mapping--");
+		logger.info("Inside /book/bookid GET mapping");
 		HashMap<String, Object> entities = new HashMap<String, Object>();
 		Book book = bookDaoServiceImpl.getBookById(bookId);
 		if (null == book) {
@@ -178,7 +178,7 @@ public class BookController {
 	public ResponseEntity<Object> updateBook(@Valid @RequestBody Book bookDetails) {
 		// Check if user authenticated and authorized
 		statsDClient.incrementCounter("endpoint.book.http.put");
-		logger.info("--Inside /book PUT mapping--");
+		logger.info("Inside /book PUT mapping");
 		Book book = bookDaoServiceImpl.getBookById(bookDetails.getId());
 		HashMap<String, Object> entities = new HashMap<String, Object>();
 		if (null == book) {
@@ -202,7 +202,7 @@ public class BookController {
 	@DeleteMapping("/book/{id}")
 	public ResponseEntity<?> deleteBook(@PathVariable(value = "id") String bookId) throws MalformedURLException {
 		statsDClient.incrementCounter("endpoint.book.id.http.del");
-		logger.info("--Inside /book/bookid DELETE mapping--");
+		logger.info("Inside /book/bookid DELETE mapping");
 		Book book = bookDaoServiceImpl.getBookById(bookId);
 		HashMap<String, Object> entities = new HashMap<String, Object>();
 		if (null == book) {
@@ -222,7 +222,7 @@ public class BookController {
 	public ResponseEntity<Object> uploadFile(@PathVariable(value = "id") String bookId,@RequestParam("file") MultipartFile file) {
 		//System.out.println("Content  Type---"+file.getContentType());
 		statsDClient.incrementCounter("endpoint.book.id.image.http.post");
-		logger.info("--Inside /book/bookid/image POST mapping--");
+		logger.info("Inside /book/bookid/image POST mapping");
 		HashMap<String, Object> entities = new HashMap<String, Object>();
 		if(file.getContentType().equals("image/jpeg")||file.getContentType().equals("image/png")||file.getContentType().equals("image/jpg")) {
 
@@ -273,7 +273,7 @@ public class BookController {
 	@ResponseBody
 	public ResponseEntity<Object> getImageById(@PathVariable(value = "idBook") String bookId,@PathVariable(value = "idImage") String imageId) throws MalformedURLException {
 		statsDClient.incrementCounter("endpoint.book.id.image.http.get");
-		logger.info("--Inside /book/bookid/image/imageid GET mapping--");
+		logger.info("Inside /book/bookid/image/imageid GET mapping");
 		HashMap<String, Object> entities = new HashMap<String, Object>();
 		Book book = bookDaoServiceImpl.getBookById(bookId);
 
@@ -307,7 +307,7 @@ public class BookController {
 	public ResponseEntity<Object> updateImage(@PathVariable(value = "idBook") String bookId,@PathVariable(value = "idImage") String imageId,@RequestParam("file") MultipartFile file) {
 		// Check if user authenticated and authorized
 		statsDClient.incrementCounter("endpoint.book.id.image.http.put");
-		logger.info("--Inside /book/bookid/image/imageid PUT mapping--");
+		logger.info("Inside /book/bookid/image/imageid PUT mapping");
 		HashMap<String, Object> entities = new HashMap<String, Object>();
 		if(file.getContentType().equals("image/jpeg")||file.getContentType().equals("image/png")||file.getContentType().equals("image/jpg")) {
 			Book book = bookDaoServiceImpl.getBookById(bookId);
@@ -354,7 +354,7 @@ public class BookController {
 	@DeleteMapping("/book/{idBook}/image/{idImage}")
 	public ResponseEntity<?> deleteImage(@PathVariable(value = "idBook") String bookId,@PathVariable(value = "idImage") String imageId) {
 		statsDClient.incrementCounter("endpoint.book.id.image.http.del");
-		logger.info("--Inside /book/bookid/image/imageid DELETE mapping--");
+		logger.info("Inside /book/bookid/image/imageid DELETE mapping");
 		Book book = bookDaoServiceImpl.getBookById(bookId);
 		HashMap<String, Object> entities = new HashMap<String, Object>();
 		if (null == book) {
