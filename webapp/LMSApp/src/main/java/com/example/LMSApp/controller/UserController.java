@@ -38,7 +38,7 @@ public class UserController {
 	@GetMapping(path = "/", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> listUser() {
 		
-		System.out.println(statsDClient.toString());
+		System.out.println("-----------statsDClient.toString()--------------");
 		
 		logger.info("--Inside root mapping--");
 		statsDClient.incrementCounter("endpoint.login.http.get");
@@ -52,7 +52,14 @@ public class UserController {
 	
 	@PostMapping("/user/register")
 	public ResponseEntity<Object> createUser(@Valid @RequestBody User user) {
-
+		
+		System.out.println("Inside post /user/register mapping");
+		
+		logger.info("Inside post /user/register mapping");
+		
+		statsDClient.incrementCounter("post /user/register");
+		
+		
 		HashMap<String, Object> entities = new HashMap();
 		User ent = null;
 		if (validateEmail(user.getEmail()) && validatePassword(user.getPassword())) {
