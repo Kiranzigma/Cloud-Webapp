@@ -18,6 +18,10 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+<<<<<<< HEAD
+=======
+		<maven.test.skip>true</maven.test.skip>
+>>>>>>> b9e9940863a517f389c4b45bd89b4fdd678411f2
 	</properties>
 
 	<dependencies>
