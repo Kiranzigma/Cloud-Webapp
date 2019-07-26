@@ -41,6 +41,8 @@ public class UserController {
 		System.out.println("-----------statsDClient.toString()--------------");
 		
 		logger.info("--Inside root mapping--");
+		logger.warn("---This is a Warn Message");
+		logger.error("This is an error message");
 		statsDClient.incrementCounter("endpoint.login.http.get");
 		HashMap<String, Object> entities = new HashMap();
 		entities.put("Status", "Authenticated");
