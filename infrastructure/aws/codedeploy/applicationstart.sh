@@ -11,6 +11,8 @@ echo "export PROFILE=cloud" >> /tmp/tempFile.sh
 echo "sudo rm /opt/tomcat/bin/setenv.sh" >> /tmp/tempFile.sh
 #echo "cd /opt/tomcat/webapps" >> /tmp/tempFile.sh
 echo "sudo bash /opt/tomcat/bin/shutdown.sh" >> /tmp/tempFile.sh
+echo "sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json -s" >> /tmp/tempFile.sh
+echo "sudo systemctl restart amazon-cloudwatch-agent" >> /tmp/tempFile.sh
 echo "sudo touch /opt/tomcat/bin/setenv.sh" >> /tmp/tempFile.sh
 echo "sudo chmod 777 /opt/tomcat/bin/setenv.sh" >> /tmp/tempFile.sh 
 echo "sudo echo \"export JAVA_OPTS=\\\"-Dspring.profiles.active=\$PROFILE -Drds.database=\$DB_HOST -Dbucketname=\$S3_BUCKET\\\"\" >> /opt/tomcat/bin/setenv.sh" >> /tmp/tempFile.sh
