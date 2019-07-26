@@ -29,6 +29,7 @@ import com.example.LMSApp.model.User;
 import com.example.LMSApp.storage.StorageService;
 import com.example.LMSApp.util.AmazonS3Example;
 import com.example.LMSApp.util.GeneratePresignedURL;
+import com.timgroup.statsd.StatsDClient;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebMvcTest(value = BookController.class, secure = false)
@@ -54,6 +55,9 @@ public class LMSAppApplicationTests {
 
    @MockBean
    private GeneratePresignedURL genPreUrl;
+   
+   @MockBean
+	private StatsDClient statsDClient;
    
 
 	  @Test 
