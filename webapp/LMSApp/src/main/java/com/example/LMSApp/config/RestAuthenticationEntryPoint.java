@@ -22,7 +22,7 @@ public class RestAuthenticationEntryPoint extends BasicAuthenticationEntryPoint 
 	response.setCharacterEncoding("UTF-8");
     PrintWriter writer = response.getWriter();
     JSONObject jsonObject = new JSONObject();
-    if(path.contains("/bookakhil")) {
+    if(path.contains("/book")) {
     	if(request.getMethod().equals("GET")&&path.contains("/image")) {
     		jsonObject.put("message", "Not authorized to read image");
     	}else if(request.getMethod().equals("POST")&&path.contains("/image")) {
