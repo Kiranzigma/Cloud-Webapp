@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.LMSApp.Dao.UserDaoService;
 import com.example.LMSApp.model.User;
+import com.timgroup.statsd.NonBlockingStatsDClient;
 import com.timgroup.statsd.StatsDClient;
 
 
@@ -30,8 +31,9 @@ public class UserController {
 	
 	private final static Logger logger = LoggerFactory.getLogger(UserController.class);
 	
-	@Autowired()
-    private StatsDClient statsDClient;
+//	@Autowired()
+//    private StatsDClient statsDClient;
+	private static final StatsDClient statsDClient = new NonBlockingStatsDClient("csye6225.webapp", "localhost", 8125);
 	
 	@GetMapping(path = "/", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> listUser() {
