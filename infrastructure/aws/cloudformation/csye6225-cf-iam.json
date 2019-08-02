@@ -68,6 +68,32 @@
             ]
          }
       },
+      "CircleCILambdaPolicy": {
+         "Type": "AWS::IAM::ManagedPolicy",
+         "Properties": {
+            "ManagedPolicyName": "CircleCI-Lambda-Policy",
+            "PolicyDocument": {
+               "Version": "2012-10-17",
+               "Statement": [
+                  {
+                     "Sid": "DevelopFunctions",
+                     "Effect": "Allow",
+                     "Action": [
+                        "lambda:AddPermission",
+                        "lambda:PutFunctionConcurrency",
+                        "lambda:UpdateFunctionCode"
+                     ],
+                     "Resource": {
+                        "Fn::Sub": "arn:aws:lambda:${AWSRegion}:${AWSAccountID}:function:*"
+                     }
+                  }
+               ]
+            },
+            "Users": [
+               "circleci"
+            ]
+         }
+      },
       "CodeDeployEC2S3Policy":{
          "Type":"AWS::IAM::ManagedPolicy",
          "Properties":{
@@ -130,6 +156,92 @@
             ]
          }
       },
+      "AccessAttachmentToS3Bucket":{
+         "Type":"AWS::IAM::ManagedPolicy",
+         "Properties":{
+            "Description":"Policy for uploading attachments into S3",
+            "ManagedPolicyName":"Access-Attachment-To-S3-Bucket",
+            "PolicyDocument":{
+               "Version":"2012-10-17",
+               "Statement":[
+                  {
+                     "Action":[
+                        "s3:PutObject",
+                        "s3:DeleteObject",
+                        "s3:Get*"
+                     ],
+                     "Effect":"Allow",
+                     "Resource":{
+                        "Fn::Join":[
+                           "",
+                           [
+                              "arn:aws:s3:::csye6225-su19-",
+                              {
+                                 "Ref":"BucketName"
+                              },
+                              ".me.csye6225.com/*"
+                           ]
+                        ]
+                     }
+                  }
+               ]
+            }
+         }
+      },      
+      "EC2PublishSNSPolicy": {
+         "Type": "AWS::IAM::ManagedPolicy",
+         "Properties": {
+            "ManagedPolicyName": "EC2-Publish-SNS",
+            "PolicyDocument": {
+               "Version": "2012-10-17",
+               "Statement": [
+                  {
+                     "Effect": "Allow",
+                     "Action": [
+                        "SNS:Publish",
+			"SNS:CreateTopic"
+                     ],
+                     "Resource": {
+                        "Fn::Sub": "arn:aws:sns:${AWSRegion}:${AWSAccountID}:password_reset"
+                     }
+                  }
+               ]
+            }
+         }
+       },
+      "LambdaSESPolicy": {
+         "Type": "AWS::IAM::ManagedPolicy",
+         "Properties": {
+            "ManagedPolicyName": "Lambda-Execution-Policy",
+            "PolicyDocument": {
+               "Version": "2012-10-17",
+               "Statement": [
+                  {
+                     "Effect": "Allow",
+                     "Action": [
+                        "ses:SendEmail"
+                     ],
+                     "Resource": {
+                        "Fn::Sub": "arn:aws:ses:${AWSRegion}:${AWSAccountID}:identity/csye6225-su19-${BucketName}.me"
+                     }
+                  },
+                  {
+                     "Effect": "Allow",
+                     "Action": [
+                        "cloudwatch:*",
+                        "dynamodb:*",
+                        "lambda:*",
+                        "logs:*",
+                        "s3:*",
+                        "xray:PutTelemetryRecords",
+                        "xray:PutTraceSegments"
+                     ],
+                     "Resource": "*"
+                  }
+               ]
+            }
+         }
+       },
       "CirlceCICodeDeployPolicy":{
          "Type":"AWS::IAM::ManagedPolicy",
          "Properties":{
@@ -234,7 +346,7 @@
                "circleci"
             ]
          }
-      },
+       },
       "CodeDeployEC2ServiceRole":{
          "Type":"AWS::IAM::Role",
          "Properties":{
@@ -261,7 +373,8 @@
                {
                   "Ref":"AccessAttachmentToS3Bucket"
                },
-               "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+               "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy",
+               {"Ref" : "EC2PublishSNSPolicy"}
             ],
             "RoleName":"CodeDeployEC2ServiceRole"
          }
@@ -291,6 +404,33 @@
             "RoleName":"CodeDeployServiceRole"
          }
       },
+      "LambdaServiceRole": {
+         "Type": "AWS::IAM::Role",
+         "Properties": {
+            "AssumeRolePolicyDocument": {
+               "Version": "2012-10-17",
+               "Statement": [
+                  {
+                     "Effect": "Allow",
+                     "Principal": {
+                        "Service": [
+                           "lambda.amazonaws.com"
+                        ]
+                     },
+                     "Action": [
+                        "sts:AssumeRole"
+                     ]
+                  }
+               ]
+            },
+            "ManagedPolicyArns": [
+               {
+                  "Ref": "LambdaSESPolicy"
+               }
+            ],
+            "RoleName": "LambdaServiceRole"
+         }
+      },
       "EC2InstanceProfile":{
          "Type":"AWS::IAM::InstanceProfile",
          "Properties":{
@@ -303,40 +443,8 @@
             ]
          }
       },
-      "AccessAttachmentToS3Bucket":{
-         "Type":"AWS::IAM::ManagedPolicy",
-         "Properties":{
-            "Description":"Policy for uploading attachments into S3",
-            "ManagedPolicyName":"Access-Attachment-To-S3-Bucket",
-            "PolicyDocument":{
-               "Version":"2012-10-17",
-               "Statement":[
-                  {
-                     "Action":[
-                        "s3:PutObject",
-                        "s3:DeleteObject",
-                        "s3:Get*"
-                     ],
-                     "Effect":"Allow",
-                     "Resource":{
-                        "Fn::Join":[
-                           "",
-                           [
-                              "arn:aws:s3:::csye6225-su19-",
-                              {
-                                 "Ref":"BucketName"
-                              },
-                              ".me.csye6225.com/*"
-                           ]
-                        ]
-                     }
-                  }
-               ]
-            }
-         }
-      }
    },
-   "Outputs":{
+    "Outputs":{
       "CodeDeployServiceRole":{
          "Description":"CodeDeployServiceRole",
          "Value":{
@@ -349,7 +457,16 @@
             "Name":"CodeDeployServiceRole"
          }
       },
-      "EC2InstanceProfile":{
+     "LambdaServiceRole" : 
+     {
+        "Description" : "LambdaServiceRole",
+        "Value" : { "Fn::GetAtt": [ "LambdaServiceRole" , "Arn" ] },
+        "Export" : 
+        {
+        "Name" : "LambdaServiceRole" 
+        }
+    },
+    "EC2InstanceProfile":{
          "Description":"EC2InstanceProfile",
          "Value":{
             "Ref":"EC2InstanceProfile"
