@@ -170,6 +170,11 @@
                            "Fn::Sub":"csye6225-su19-${BucketName}.me.csye6225.com"
                         },
                         " >> /etc/profile \n",
+			"echo export SNS_TOPIC=",
+                        {
+                           "Ref": "SNSTopic"
+                        },
+                        " >> /etc/profile \n",
                         "sudo service codedeploy-agent start \n",
                         "sudo service codedeploy-agent status \n",
                         "systemctl start ntpd \n",
@@ -248,6 +253,10 @@
                "ReadCapacityUnits":"5",
                "WriteCapacityUnits":"5"
             },
+	    "TimeToLiveSpecification":{
+		  "AttributeName" : "TimeToLive",
+		  "Enabled" : "TRUE"
+	     },
             "Tags":[
                {
                   "Key":"Name",
@@ -256,6 +265,63 @@
                   }
                }
             ]
+         }
+      },
+     "SNSTopic": {
+         "Type": "AWS::SNS::Topic",
+         "Properties": {
+            "TopicName": "password_reset",
+            "DisplayName": "password_reset",
+            "Subscription": [
+               {
+                  "Endpoint": {
+                     "Fn::GetAtt": [
+                        "LambdaFunction",
+                        "Arn"
+                     ]
+                  },
+                  "Protocol": "lambda"
+               }
+            ]
+         }
+      },
+      "LambdaFunction": {
+         "Type": "AWS::Lambda::Function",
+         "Properties": {
+            "FunctionName": "password_reset",
+            "Handler": "csye6225.Lmsapp_lambda.EmailHandler::handleRequest",
+            "MemorySize": 256,
+            "Environment": {
+               "Variables": {
+                  "AWS_DOMAIN_NAME": {
+                     "Ref": "BucketName"
+                  }
+               }
+            },
+            "Role": {
+               "Fn::ImportValue": "LambdaServiceRole"
+            },
+            "Code": {
+               "S3Bucket": {
+                     "Fn::Sub": "lambda.csye6225-su19-${BucketName}.me"
+               },
+               "S3Key":"Lmsapp-lambda.zip"
+            },
+            "Runtime": "java8",
+            "Timeout": 100,
+            "TracingConfig": {
+               "Mode": "Active"
+            }
+         }
+      },
+      "LambdaPermission": {
+         "Type": "AWS::Lambda::Permission",
+         "Properties": {
+            "Action": "lambda:invokeFunction",
+            "FunctionName": {
+               "Ref": "LambdaFunction"
+            },
+            "Principal": "sns.amazonaws.com"
          }
       },
       "CodeDeployApplication":{
