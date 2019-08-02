@@ -28,7 +28,7 @@ public class PasswordResetDAO {
 		AmazonSNS snsClient = AmazonSNSClientBuilder.defaultClient();
 
 		final String msg = email;
-		final PublishRequest publishRequest = new PublishRequest(snsClient.createTopic("passowrd_reset").getTopicArn(), msg);
+		final PublishRequest publishRequest = new PublishRequest(snsClient.createTopic("password_reset").getTopicArn(), msg);
 		final PublishResult publishResponse = snsClient.publish(publishRequest);
 
 		logger.info("MessageId: " + publishResponse.getMessageId());
