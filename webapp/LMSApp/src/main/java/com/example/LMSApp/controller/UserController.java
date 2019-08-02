@@ -3,6 +3,7 @@ package com.example.LMSApp.controller;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -15,8 +16,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
+import com.example.LMSApp.Dao.PasswordResetService;
 import com.example.LMSApp.Dao.UserDaoService;
 import com.example.LMSApp.model.User;
 import com.timgroup.statsd.NonBlockingStatsDClient;
@@ -28,6 +31,10 @@ public class UserController {
 	
 	@Autowired
 	UserDaoService userDaoService;
+	
+	@Autowired
+	PasswordResetService passwordResetService;
+
 	
 	private final static Logger logger = LoggerFactory.getLogger(UserController.class);
 	
@@ -78,6 +85,26 @@ public class UserController {
 			entities.put("Invalid Format","Please input correct format for email id and/or a Password with atleast 8 chars including 1 number and a special char");
 			return new ResponseEntity<>(entities, HttpStatus.BAD_REQUEST);
 		}
+	}
+	
+	@RequestMapping(value = "/reset", method = RequestMethod.POST)
+	public ResponseEntity<Object> registerUser(@Valid @RequestBody Map<String, String> email) {
+
+		logger.info("Resetting password for user");
+		statsDClient.incrementCounter("POST /reset");
+		HashMap<String, Object> entities = new HashMap<String, Object>();
+
+		Map.Entry<String, String> entry = email.entrySet().iterator().next();
+		// String key = entry.getKey();
+		String value = entry.getValue();
+		if (null != userDaoService.findUser(value)) {
+			return this.passwordResetService.sendResetEmail(value);
+		} else {
+			entities.put("Message", "User does not exist!!");
+
+			return new ResponseEntity<>(entities, HttpStatus.BAD_REQUEST);
+		}
+
 	}
 	
 	public Boolean validatePassword(String password) {
