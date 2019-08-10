@@ -27,10 +27,16 @@ Backend Framework - Spring and Hibernate
 6. When loging in use Basic Auth in postman with the username and password registered as Authentication to get logged in
 7. Add the authorization header and hit the rest of uri's for the book rest service appropriately
 
-## Running Tests
+## Running Tests - Unit, Integration and Load
 1. Run the "LmsAppApplicationTests.java" file as a JUnit Test
+2. Load the jmx file in JMeter
+3. We have used CSV data to test the registration of users	
 
-## CI/CD
+## CI/CD - CircleCI
+1. Added github repositories as CircleCI projects
+2. Run the builds using circle ci API
+3. Any changes made to the code in github would trigger a build
+4. The web application would be deployed on the instances
 
 
 
