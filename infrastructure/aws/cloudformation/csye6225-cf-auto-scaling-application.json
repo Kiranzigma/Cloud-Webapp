@@ -321,12 +321,15 @@
          "Properties": {
             "Name": "ELBTargetGroup",
             "HealthCheckIntervalSeconds": 30,
-            "HealthCheckTimeoutSeconds": 5,
+            "HealthCheckTimeoutSeconds": 7,
             "HealthyThresholdCount": 3,
+	    "HealthCheckPort":"8080",
+	    "HealthCheckPath":"/",
+    	    "HealthCheckProtocol":"HTTP",
             "Matcher": {
                "HttpCode": "200-499"
             },
-            "Port": 80,
+            "Port": 8080,
             "Protocol": "HTTP",
             "UnhealthyThresholdCount": 5,
             "VpcId": {
@@ -351,12 +354,15 @@
          "Properties": {
             "Name": "NoWAFELBTargetGroup",
             "HealthCheckIntervalSeconds": 30,
-            "HealthCheckTimeoutSeconds": 5,
+            "HealthCheckTimeoutSeconds": 7,
             "HealthyThresholdCount": 3,
+	    "HealthCheckPort":"8080",
+	    "HealthCheckPath":"/",
+    	    "HealthCheckProtocol":"HTTP",
             "Matcher": {
                "HttpCode": "200-499"
             },
-            "Port": 80,
+            "Port": 8080,
             "Protocol": "HTTP",
             "UnhealthyThresholdCount": 5,
             "VpcId": {
@@ -449,7 +455,8 @@
                {
                   "IpProtocol":"tcp",
                   "FromPort":22,
-                  "ToPort":22
+                  "ToPort":22,
+		  "CidrIp":"0.0.0.0/0"
                },
                {
                   "IpProtocol":"tcp",
@@ -462,7 +469,8 @@
                {
                   "IpProtocol":"tcp",
                   "FromPort":443,
-                  "ToPort":443
+                  "ToPort":443,
+		  "CidrIp":"0.0.0.0/0"
                },
                {
                   "IpProtocol":"tcp",
@@ -499,7 +507,14 @@
                {
                   "IpProtocol": "tcp",
                   "FromPort": "443",
-                  "ToPort": "443"
+                  "ToPort": "443",
+		  "CidrIp":"0.0.0.0/0"
+               },
+		{
+                  "IpProtocol": "tcp",
+                  "FromPort": "8080",
+                  "ToPort": "8080",
+		  "CidrIp":"0.0.0.0/0"
                }
             ]
          }
@@ -884,7 +899,7 @@
             "DeploymentGroupName": "csye6225-webapp-deployment",
             "DeploymentStyle": {
                "DeploymentType": "IN_PLACE",
-               "DeploymentOption": "WITH_TRAFFIC_CONTROL"
+               "DeploymentOption": "WITHOUT_TRAFFIC_CONTROL"
             },
             "DeploymentConfigName": "CodeDeployDefault.AllAtOnce",
             "Ec2TagFilters": [
